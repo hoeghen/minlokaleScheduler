@@ -1,5 +1,6 @@
 package bitwork.dk;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -23,6 +24,7 @@ public class TilbudEmailCollector {
             tilbudEmails.put(postNummer,new TilbudEmail());
         }
         tilbudEmails.get(postNummer).users.add(user);
+        tilbudEmails.get(postNummer).bynavn = user.getBynavn();
     }
 
     public Set<String> getPostCodes() {
@@ -58,11 +60,17 @@ public class TilbudEmailCollector {
 
     private String createContent(String postCode) {
         StringBuffer content = new StringBuffer();
-        content.append("<h1> Ugens tilbud fra MinLokaleButik.dk</h1>");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("w - yyyy");
+        String format = simpleDateFormat.format(new Date());
         TilbudEmail tilbudEmail = tilbudEmails.get(postCode);
+
+        content.append("<h1> Ugens tilbud fra MinLokaleButik.dk</h1>");
+        content.append("<h2>"+tilbudEmail.bynavn.substring(0, 1).toUpperCase() + tilbudEmail.bynavn.substring(1)+" Uge "+format+"</h2>");
+
         for (Tilbud tilbud : tilbudEmail.tilbud) {
             renderTilbud(content, tilbud);
         }
+        content.append("<h2>Kom ind på <a href=\"http://minlokalebutik.dk\">minlokalebutik.dk</a> og se flere tilbud.</h2>");
         return content.toString();
     }
 
@@ -72,8 +80,9 @@ public class TilbudEmailCollector {
     }
 
     private void renderTilbud(StringBuffer buffer, Tilbud tilbud) {
-        buffer.append("<p><h2>"+tilbud.kort+"</h2>");
-        buffer.append(tilbud.pris + " kr" + " rabat "+tilbud.rabat + "% </p>");
+        buffer.append("<p><h3>"+tilbud.kort+ " " + tilbud.pris + " kr " + "spar ("+ tilbud.rabat+" %)"+"</h3>");
+        buffer.append("<p>"+tilbud.lang+"</p>");
+        buffer.append("<p>"+tilbud.butik.navn+","+tilbud.butik.adresse+"</p>");
     }
 
 }

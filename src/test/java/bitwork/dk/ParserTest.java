@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Virker min parser?
  * Created by cha on 19-09-2015.
  */
 public class ParserTest {

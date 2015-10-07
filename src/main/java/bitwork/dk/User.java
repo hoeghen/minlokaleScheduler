@@ -14,6 +14,10 @@ public class User {
         this.bynavn = bynavn;
     }
 
+    public User() {
+    }
+
+
     public String getEmail() {
         return email;
     }

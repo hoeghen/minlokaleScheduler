@@ -12,16 +12,17 @@ import javax.ws.rs.core.MediaType;
 /**
  * Created by cha on 20-09-2015.
  */
-public class EmailSender {
+public class EmailSender implements IEmailSender {
     static  String mailgunApiKey = "key-fafe77f0a13240a2b39678542f6124e8";
+
+
     public static void sendEmail(TilbudEmail email) {
-
         System.out.println("email = [" + email + "]");
-
     }
 
 
-    public static ClientResponse sendEmailApi(TilbudEmail email) {
+    @Override
+    public ClientResponse sendEmailApi(TilbudEmail email) {
         Client client = Client.create();
         client.addFilter(new HTTPBasicAuthFilter("api",mailgunApiKey));
         WebResource webResource =

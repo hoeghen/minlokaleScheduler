@@ -13,4 +13,8 @@ public class Butik {
         this.navn = navn;
         this.postNummer = postNummer;
     }
+
+    public Butik() {
+    }
+
 }

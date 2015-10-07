@@ -16,19 +16,19 @@ import java.lang.reflect.Type;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
+import java.util.logging.Logger;
 
 /**
  * Created by cha on 30-08-2015.
  */
 public class MailerServlet extends HttpServlet{
-    String firebaseRef = "jobspot.firebaseio.com";
-
+    Logger logger;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
-        Map<String, User> users = retrieveNotifications();
-        Map<String, Tilbud> alleTilbud = retrieveAlleTilbud();
+        logger = Logger.getLogger(MailerServlet.class.getName());
+        Map<String, User> users = new FireBaseRetriever().retrieveNotifications();
+        Map<String, Tilbud> alleTilbud = new FireBaseRetriever().retrieveAlleTilbud();
 
         createAndSendEmail(users.values(), alleTilbud.values());
     }
@@ -50,28 +50,13 @@ public class MailerServlet extends HttpServlet{
             allEmails.addAll(emails);
         }
 
+        IEmailSender sender = new HtmlEmailSender(getServletContext().getResourceAsStream("/email.html"),getServletContext().getResourceAsStream("/images/logo.png"));
         for (TilbudEmail email : allEmails) {
-            EmailSender.sendEmail(email);
+            sender.sendEmailApi(email);
         }
     }
 
 
-    private Map<String, User> retrieveNotifications() throws IOException {
-        URL url = new URL("https://"+firebaseRef+"/notifications.json");
-        BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
-        Type type = new TypeToken<Map<String, User>>(){}.getType();
-        Map<String,User> notifications = new GsonBuilder().create().fromJson(reader, type);
-        return notifications;
-    }
-
-    private Map<String, Tilbud> retrieveAlleTilbud() throws IOException {
-        BufferedReader reader;
-        URL url = new URL("https://"+firebaseRef+"/alletilbud.json");
-        reader = new BufferedReader(new InputStreamReader(url.openStream()));
-        Type type = new TypeToken<Map<String, Tilbud>>(){}.getType();
-        Map<String,Tilbud> alleTilbud = new GsonBuilder().create().fromJson(reader, type);
-        return alleTilbud;
-    }
 
 
 }
