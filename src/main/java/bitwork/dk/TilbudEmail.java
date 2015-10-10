@@ -10,18 +10,19 @@ public class TilbudEmail {
     String postCode;
     String bynavn;
     private String ugenummer;
-
     List<Tilbud> tilbud = new ArrayList<Tilbud>();
     List<User> users = new ArrayList<User>();
-
-    String receipients;
-    String contents;
+    Modtager receipients;
 
     @Override
     public String toString() {
         return "TilbudEmail{" +
-                "receipients='" + receipients + '\'' +
-                ", contents='" + contents + '\'' +
+                "postCode='" + postCode + '\'' +
+                ", bynavn='" + bynavn + '\'' +
+                ", ugenummer='" + ugenummer + '\'' +
+                ", tilbud=" + tilbud +
+                ", users=" + users +
+                ", receipients='" + receipients + '\'' +
                 '}';
     }
 

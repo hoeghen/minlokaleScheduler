@@ -2,12 +2,13 @@
 <cronentries>
     <cron>
         <url>/runEmailer</url>
-        <description>Run email every 2 minutes</description>
-        <schedule>every 2 minutes</schedule>
+        <description>Run email every 2 hours</description>
+        <schedule>every 2 hours</schedule>
     </cron>
     <cron>
         <url>/runEmailer</url>
         <description>Run email every week</description>
-        <schedule>every monday 09:00</schedule>
+        <schedule>every monday 15:00</schedule>
     </cron>
+
 </cronentries>

@@ -45,17 +45,17 @@
         <dependency>
             <groupId>com.sun.jersey</groupId>
             <artifactId>jersey-client</artifactId>
-            <version>1.18.1</version>
+            <version>1.19</version>
         </dependency>
         <dependency>
             <groupId>com.sun.jersey</groupId>
             <artifactId>jersey-core</artifactId>
-            <version>1.18.1</version>
+            <version>1.19</version>
         </dependency>
         <dependency>
             <groupId>com.sun.jersey.contribs</groupId>
             <artifactId>jersey-multipart</artifactId>
-            <version>1.18.1</version>
+            <version>1.19</version>
         </dependency>
         <dependency>
             <groupId>com.floreysoft</groupId>
@@ -104,6 +104,10 @@
                             <directory>${basedir}/src/main/webapp/WEB-INF</directory>
                             <filtering>true</filtering>
                             <targetPath>WEB-INF</targetPath>
+                        </resource>
+                        <resource>
+                            <directory>${basedir}/src/main/resources</directory>
+                            <targetPath>WEB-INF/classes</targetPath>
                         </resource>
                     </webResources>
                 </configuration>

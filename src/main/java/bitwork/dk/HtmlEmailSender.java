@@ -11,78 +11,58 @@ import com.sun.jersey.multipart.file.StreamDataBodyPart;
 import javax.naming.Context;
 import javax.servlet.ServletContext;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.io.*;
 import java.net.URL;
+import java.util.logging.Logger;
 
 /**
  * Created by cha on 03-10-2015.
  */
 public class HtmlEmailSender implements IEmailSender {
     static  String mailgunApiKey = "key-fafe77f0a13240a2b39678542f6124e8";
-    private final InputStream htmlStream;
-    private final InputStream logoStream;
+    static  Logger logger = Logger.getLogger(HtmlEmailSender.class.getName());
+
+    private final String html;
+    Client client;
+    WebResource webResource;
 
 
-    public HtmlEmailSender(InputStream htmlStream,InputStream logoStream) {
-        this.htmlStream = htmlStream;
-        this.logoStream = logoStream;
+    public HtmlEmailSender(String htmlPath) {
+        this.html = StreamHelper.getStringFromInputStream(this.getClass().getResourceAsStream(htmlPath));
+        client = Client.create();
+        client.addFilter(new HTTPBasicAuthFilter("api","key-fafe77f0a13240a2b39678542f6124e8"));
+        webResource =client.resource("https://api.mailgun.net/v3/minlokalebutik.dk/messages");
+
     }
 
     @Override
     public ClientResponse sendEmailApi(TilbudEmail email) {
-        return sendInlineImage(htmlStream,logoStream,email);
+        return sendInlineImage(html,email);
     }
 
 
-    public ClientResponse sendInlineImage(InputStream htmlStream, InputStream logoStream, TilbudEmail email) {
-        Client client = Client.create();
-        client.addFilter(new HTTPBasicAuthFilter("api","key-fafe77f0a13240a2b39678542f6124e8"));
-        WebResource webResource =client.resource("https://api.mailgun.net/v3/minlokalebutik.dk/messages");
+    public ClientResponse sendInlineImage(String html,TilbudEmail email) {
 
         FormDataMultiPart form = new FormDataMultiPart();
         form.field("from", "admin@minlokalebutik.dk");
-        form.field("to", email.receipients);
+        form.field("to", email.receipients.getRecipients());
         form.field("subject", "MinLokaleButik.dk - Ugens Tilbud");
-
-        String html = getStringFromInputStream(htmlStream);
         String templatedHtml = Templater.apply(email, html);
-
-
         form.field("html", templatedHtml);
 
-        form.bodyPart(new StreamDataBodyPart("inline", logoStream, "images/logo.png",MediaType.APPLICATION_OCTET_STREAM_TYPE));
-        return webResource.type(MediaType.MULTIPART_FORM_DATA_TYPE).
+        InputStream pngStream = this.getClass().getResourceAsStream("/images/logo.png");
+        form.bodyPart(new StreamDataBodyPart("inline", pngStream, "images/logo.png",MediaType.APPLICATION_OCTET_STREAM_TYPE));
+        ClientResponse post = webResource.type(MediaType.MULTIPART_FORM_DATA_TYPE).
                 post(ClientResponse.class, form);
-    }
-
-
-    private static String getStringFromInputStream(InputStream is) {
-
-        BufferedReader br = null;
-        StringBuilder sb = new StringBuilder();
-
-        String line;
-        try {
-
-            br = new BufferedReader(new InputStreamReader(is));
-            while ((line = br.readLine()) != null) {
-                sb.append(line);
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (br != null) {
-                try {
-                    br.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+        if(post.getStatusInfo().getFamily().equals(Response.Status.Family.SUCCESSFUL)){
+            logger.info("succesfully send " + email.receipients.getUsers().size() + " emails to " + email.getBynavn());
+        }else{
+            logger.info("succesfully failed sending " + email.receipients.getUsers().size() + " emails to " + email.getBynavn());
         }
-
-        return sb.toString();
-
+        return post;
     }
+
+
 
 }

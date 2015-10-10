@@ -6,15 +6,41 @@ package bitwork.dk;
 public class Butik {
     String adresse;
     String navn;
-    String postNummer;
 
-    public Butik(String adresse, String navn, String postNummer) {
+    public String getPostnummer() {
+        return postnummer;
+    }
+
+    public void setPostnummer(String postnummer) {
+        this.postnummer = postnummer;
+    }
+
+    String postnummer;
+
+    public Butik(String adresse, String navn, String postnummer) {
         this.adresse = adresse;
         this.navn = navn;
-        this.postNummer = postNummer;
+        this.postnummer = postnummer;
     }
 
     public Butik() {
     }
+
+    public String getAdresse() {
+        return adresse;
+    }
+
+    public void setAdresse(String adresse) {
+        this.adresse = adresse;
+    }
+
+    public String getNavn() {
+        return navn;
+    }
+
+    public void setNavn(String navn) {
+        this.navn = navn;
+    }
+
 
 }
