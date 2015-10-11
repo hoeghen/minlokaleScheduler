@@ -42,6 +42,7 @@ public class HtmlEmailSender implements IEmailSender {
 
         FormDataMultiPart form = new FormDataMultiPart();
         form.field("from", "admin@minlokalebutik.dk");
+        form.field("to", "admin@minlokalebutik.dk");
         form.field("bcc", email.receipients.getRecipients());
         form.field("subject", "MinLokaleButik.dk - Ugens Tilbud");
         String templatedHtml = Templater.apply(email, html);
@@ -54,7 +55,8 @@ public class HtmlEmailSender implements IEmailSender {
         if(post.getStatusInfo().getFamily().equals(Response.Status.Family.SUCCESSFUL)){
             logger.info("succesfully send " + email.receipients.getUsers().size() + " emails to " + email.getBynavn());
         }else{
-            logger.info("succesfully failed sending " + email.receipients.getUsers().size() + " emails to " + email.getBynavn());
+            logger.info("failed sending " + email.receipients.getUsers().size() + " emails to " + email.getBynavn());
+            logger.info("failed sending " + post.getStatusInfo().getReasonPhrase());
         }
         return post;
     }
