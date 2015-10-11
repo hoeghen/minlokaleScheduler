@@ -5,15 +5,11 @@ import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.api.client.filter.HTTPBasicAuthFilter;
 import com.sun.jersey.multipart.FormDataMultiPart;
-import com.sun.jersey.multipart.file.FileDataBodyPart;
 import com.sun.jersey.multipart.file.StreamDataBodyPart;
 
-import javax.naming.Context;
-import javax.servlet.ServletContext;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.*;
-import java.net.URL;
+import java.io.InputStream;
 import java.util.logging.Logger;
 
 /**
@@ -46,7 +42,7 @@ public class HtmlEmailSender implements IEmailSender {
 
         FormDataMultiPart form = new FormDataMultiPart();
         form.field("from", "admin@minlokalebutik.dk");
-        form.field("to", email.receipients.getRecipients());
+        form.field("bcc", email.receipients.getRecipients());
         form.field("subject", "MinLokaleButik.dk - Ugens Tilbud");
         String templatedHtml = Templater.apply(email, html);
         form.field("html", templatedHtml);

@@ -1,7 +1,6 @@
 package bitwork.dk;
 
 import junit.framework.TestCase;
-import org.junit.Ignore;
 
 import java.util.ArrayList;
 import java.util.List;
