@@ -1,5 +1,7 @@
 package bitwork.dk;
 
+import java.util.Date;
+
 /**
  * Created by cha on 30-08-2015.
  */
@@ -9,6 +11,9 @@ public class Tilbud {
     String rabat;
     String kort;
     String lang;
+
+    Date slut;
+    Date start;
 
     public Tilbud(Butik butik, String pris, String rabat, String kort, String lang) {
         this.butik = butik;
@@ -67,5 +72,30 @@ public class Tilbud {
 
     public void setLang(String lang) {
         this.lang = lang;
+    }
+
+
+    public Date getSlut() {
+        return slut;
+    }
+
+    public void setSlut(Date slut) {
+        this.slut = slut;
+    }
+    public Date getStart() {
+        return start;
+    }
+
+    public void setStart(Date start) {
+        this.start = start;
+    }
+
+    public boolean active() {
+        if(slut == null || !slut.before(new Date())){
+            return true;
+        }else{
+            return false;
+        }
+
     }
 }

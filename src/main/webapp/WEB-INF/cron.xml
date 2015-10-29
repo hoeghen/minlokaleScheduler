@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <cronentries>
-    <cron>
-        <url>/runEmailer</url>
-        <description>Run email every 2 hours</description>
-        <schedule>every 2 hours</schedule>
-    </cron>
+    <!--<cron>-->
+        <!--<url>/runEmailer</url>-->
+        <!--<description>Run email every 2 hours</description>-->
+        <!--<schedule>every 2 hours</schedule>-->
+    <!--</cron>-->
     <cron>
         <url>/runEmailer</url>
         <description>Run email every week</description>

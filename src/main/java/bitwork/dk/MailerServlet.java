@@ -42,7 +42,9 @@ public class MailerServlet extends HttpServlet{
         TilbudEmailCollector collector = new TilbudEmailCollector();
 
         for (Tilbud tilbud : alleTilbud){
-            collector.addTilbud(tilbud);
+            if(tilbud.active()){
+                collector.addTilbud(tilbud);
+            }
         }
 
         for (User user : users){
@@ -56,6 +58,8 @@ public class MailerServlet extends HttpServlet{
         }
         return allEmails;
     }
+
+
 
 
 }
